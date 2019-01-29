@@ -268,6 +268,56 @@
 || 
 || 2 persons found!
 || ===================================================
+|| Enter command: || [Command entered:  add Charlie Dickson e/charlie.d@nus.edu.sg p/333333]
+|| New person added: Charlie Dickson, Phone: 333333, Email: charlie.d@nus.edu.sg
+|| ===================================================
+|| Enter command: || [Command entered:  find Betsy Dickson Charlie]
+|| 	1. Betsy Choo  Phone Number: 222222  Email: benchoo@nus.edu.sg
+|| 	2. Dickson Ee  Phone Number: 444444  Email: dickson@nus.edu.sg
+|| 	3. Charlie Dickson  Phone Number: 333333  Email: charlie.d@nus.edu.sg
+|| 
+|| 3 persons found!
+|| ===================================================
+|| Enter command: || [Command entered:  deleteMulti]
+|| Invalid command format: deleteMulti 
+|| deleteMulti: Deletes multiple persons identified by the index number used in list call.
+|| 	Parameters: INDEX INDEX
+|| 	Example: deleteMulti 1 2
+|| 
+|| ===================================================
+|| Enter command: || [Command entered:  deleteMulti should only be number]
+|| Invalid command format: deleteMulti 
+|| deleteMulti: Deletes multiple persons identified by the index number used in list call.
+|| 	Parameters: INDEX INDEX
+|| 	Example: deleteMulti 1 2
+|| 
+|| ===================================================
+|| Enter command: || [Command entered:  deleteMulti -1]
+|| Invalid command format: deleteMulti 
+|| deleteMulti: Deletes multiple persons identified by the index number used in list call.
+|| 	Parameters: INDEX INDEX
+|| 	Example: deleteMulti 1 2
+|| 
+|| ===================================================
+|| Enter command: || [Command entered:  deleteMulti 0]
+|| The person index provided is invalid
+|| ===================================================
+|| Enter command: || [Command entered:  deleteMulti 5]
+|| The person index provided is invalid
+|| ===================================================
+|| Enter command: || [Command entered:  deleteMulti 2 3]
+|| Deleted Person: Charlie Dickson  Phone Number: 333333  Email: charlie.d@nus.edu.sg
+|| Deleted Person: Dickson Ee  Phone Number: 444444  Email: dickson@nus.edu.sg
+|| 
+|| ===================================================
+|| Enter command: || [Command entered:  deleteMulti 2 3]
+|| Person could not be found in address book
+|| ===================================================
+|| Enter command: || [Command entered:  list]
+|| 	1. Betsy Choo  Phone Number: 222222  Email: benchoo@nus.edu.sg
+|| 
+|| 1 persons found!
+|| ===================================================
 || Enter command: || [Command entered:  clear]
 || Address book has been cleared!
 || ===================================================

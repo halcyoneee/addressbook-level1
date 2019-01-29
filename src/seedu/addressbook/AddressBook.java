@@ -118,8 +118,15 @@ public class AddressBook {
     private static final String COMMAND_DELETE_WORD = "delete";
     private static final String COMMAND_DELETE_DESC = "Deletes a person identified by the index number used in "
                                                     + "the last find/list call.";
+
+    private static final String COMMAND_DELETE_MULTI_WORD = "deleteMulti";
+    private static final String COMMAND_DELETE_MULTI_DESC = "Deletes multiple persons identified by the index number used in list call.";
+
     private static final String COMMAND_DELETE_PARAMETER = "INDEX";
     private static final String COMMAND_DELETE_EXAMPLE = COMMAND_DELETE_WORD + " 1";
+
+    private static final String COMMAND_DELETE_MULTI_PARAMETER = "INDEX INDEX";
+    private static final String COMMAND_DELETE_MULTI_EXAMPLE = COMMAND_DELETE_MULTI_WORD + " 1 2";
 
     private static final String COMMAND_CLEAR_WORD = "clear";
     private static final String COMMAND_CLEAR_DESC = "Clears address book permanently.";
@@ -377,6 +384,8 @@ public class AddressBook {
             return executeListAllPersonsInAddressBook();
         case COMMAND_DELETE_WORD:
             return executeDeletePerson(commandArgs);
+        case COMMAND_DELETE_MULTI_WORD:
+            return executeDeleteMultiPersons(commandArgs);
         case COMMAND_CLEAR_WORD:
             return executeClearAddressBook();
         case COMMAND_HELP_WORD:
@@ -513,6 +522,44 @@ public class AddressBook {
     }
 
     /**
+     * Deletes multiple persons in one go identified using last displayed index.
+     *
+     * @param commandArgs full command args string from the user
+     * @return Feedback display message for the multiple individual delete
+     * operation result
+     */
+    private static String executeDeleteMultiPersons(String commandArgs) {
+        if (!isDeleteMultiPersonArgsValid(commandArgs)) {
+            return getMessageForInvalidCommandInput(COMMAND_DELETE_MULTI_WORD, getUsageInfoForDeleteMultiCommand());
+        }
+
+        String[] extractedIndices = commandArgs.split(" ");
+        ArrayList<Integer> extractedIndicesInt = new ArrayList<>();
+        for (String index:extractedIndices){
+            extractedIndicesInt.add(Integer.parseInt(index));
+        }
+
+        Collections.sort(extractedIndicesInt);
+        Collections.reverse(extractedIndicesInt);
+
+        String output = "";
+        for (Integer targetVisibleIndex: extractedIndicesInt) {
+            if (!isDisplayIndexValidForLastPersonListingView(targetVisibleIndex)) {
+                return MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
+            }
+            String[] targetInModel = getPersonByLastVisibleIndex(targetVisibleIndex);
+
+            if (deletePersonFromAddressBook(targetInModel)) {
+                output += getMessageForSuccessfulDelete(targetInModel) + LS ;
+            } else {
+                return MESSAGE_PERSON_NOT_IN_ADDRESSBOOK;
+            }
+        }
+
+        return output;
+    }
+
+    /**
      * Checks validity of delete person argument string's format.
      *
      * @param rawArgs raw command args string for the delete person command
@@ -525,6 +572,24 @@ public class AddressBook {
         } catch (NumberFormatException nfe) {
             return false;
         }
+    }
+
+    /**
+     * Checks validity of delete multiple persons argument string's format.
+     *
+     * @param rawArgs raw command args string for the delete multi person
+     *                command
+     * @return whether the input args string is valid
+     */
+    private static boolean isDeleteMultiPersonArgsValid(String rawArgs) {
+        final String[] extractedIndices = rawArgs.split(" ");
+        for (String index: extractedIndices) {
+            if (!index.matches("\\d+")){
+                return false;
+            }
+        }
+
+        return extractedIndices.length >= DISPLAYED_INDEX_OFFSET;
     }
 
     /**
@@ -1110,6 +1175,13 @@ public class AddressBook {
         return String.format(MESSAGE_COMMAND_HELP, COMMAND_DELETE_WORD, COMMAND_DELETE_DESC) + LS
                 + String.format(MESSAGE_COMMAND_HELP_PARAMETERS, COMMAND_DELETE_PARAMETER) + LS
                 + String.format(MESSAGE_COMMAND_HELP_EXAMPLE, COMMAND_DELETE_EXAMPLE) + LS;
+    }
+
+    /** Returns the string for showing 'deleteMulti' command usage instruction */
+    private static String getUsageInfoForDeleteMultiCommand() {
+        return String.format(MESSAGE_COMMAND_HELP, COMMAND_DELETE_MULTI_WORD, COMMAND_DELETE_MULTI_DESC) + LS
+          + String.format(MESSAGE_COMMAND_HELP_PARAMETERS, COMMAND_DELETE_MULTI_PARAMETER) + LS
+          + String.format(MESSAGE_COMMAND_HELP_EXAMPLE, COMMAND_DELETE_MULTI_EXAMPLE) + LS;
     }
 
     /** Returns string for showing 'clear' command usage instruction */

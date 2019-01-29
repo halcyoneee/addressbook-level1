@@ -92,6 +92,28 @@
   list
 
 ##########################################################
+# test delete multi persons command
+##########################################################
+
+# last active view: [1] betsy [2] Dickson
+  add Charlie Dickson e/charlie.d@nus.edu.sg p/333333
+  find Betsy Dickson Charlie
+
+  # should catch invalid args format
+  deleteMulti
+  deleteMulti should only be number
+
+  # should catch invalid index
+  deleteMulti -1
+  deleteMulti 0
+  deleteMulti 5
+
+  # should catch attempt to delete something already deleted
+  deleteMulti 2 3
+  deleteMulti 2 3
+  list
+
+##########################################################
 # test clear command
 ##########################################################
 
